@@ -24,6 +24,18 @@ public class EmployeeService {
         return repository.findById(id);
     }
 
+    public Employee findEmployeesByFirstName(String firstName) {
+        return repository.findByFirstName(firstName);
+    }
+
+    public Employee findEmployeesByLastName(String lastName) {
+        return repository.findByLastName(lastName);
+    }
+
+    public Employee findEmployeesByFullName(String firstName, String lastName) {
+        return repository.findByFirstNameAndLastName(firstName, lastName);
+    }
+
     public Employee createEmployee(Employee employee) {
         return repository.save(employee);
     }

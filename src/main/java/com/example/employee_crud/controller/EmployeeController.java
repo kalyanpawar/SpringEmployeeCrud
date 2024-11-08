@@ -30,6 +30,21 @@ public class EmployeeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/findByFirstName")
+    public Employee getEmployeesByFirstName(@RequestParam String firstName) {
+        return service.findEmployeesByFirstName(firstName);
+    }
+
+    @GetMapping("/findByLastName")
+    public Employee getEmployeesByLastName(@RequestParam String lastName) {
+        return service.findEmployeesByLastName(lastName);
+    }
+
+    @GetMapping("/findByFullName")
+    public Employee getEmployeesByFullName(@RequestParam String firstName, @RequestParam String lastName) {
+        return service.findEmployeesByFullName(firstName, lastName);
+    }
+
     @PostMapping
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
         return new ResponseEntity<>(service.createEmployee(employee), HttpStatus.CREATED);
