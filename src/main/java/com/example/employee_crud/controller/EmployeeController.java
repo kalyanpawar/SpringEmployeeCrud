@@ -2,10 +2,14 @@ package com.example.employee_crud.controller;
 
 import com.example.employee_crud.entity.Employee;
 import com.example.employee_crud.service.EmployeeService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import utility.ExcelGenerator;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 @RestController
@@ -59,6 +63,26 @@ public class EmployeeController {
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         service.deleteEmployee(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/export/excel")
+    public ResponseEntity<byte[]> exportToExcel() {
+        List<Employee> employees = service.getAllEmployees();
+        ByteArrayInputStream excelFile = ExcelGenerator.employeesToExcel(employees);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=employees.xlsx");
+
+        try {
+            byte[] excelBytes = excelFile.readAllBytes();  // Read properly the ByteArrayInputStream
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                    .body(excelBytes);
+        }catch(Exception ioex){
+            // Handle in case anything misread
+            throw new RuntimeException("Error streaming Excel file response: "+ ioex);
+        }
     }
 }
 
