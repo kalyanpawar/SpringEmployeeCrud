@@ -1,0 +1,24 @@
+meta {
+  name: Delete employee
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{host}}{{port}}/api/employees/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+assert {
+  res.status: eq 204
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Get all employees
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}{{port}}/api/employees
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+}
+
+script:post-response {
+  const response = res.getBody();
+  const expectedId = Number(bru.getEnvVar("id"));
+  
+  const foundEmployee = response.find(emp => emp.id === expectedId);
+  
+  if (!foundEmployee) {
+    throw new Error(`❌ Employee with ID ${expectedId} not found in response`);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,101 @@
+meta {
+  name: Add new employee
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}{{port}}/api/employees
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "firstName": "{{first_name}}",
+    "lastName": "{{lastname}}",
+    "age": {{age}},
+    "salary": {{salary}},
+    "dateOfJoining": "{{todays_date}}",
+    "dob": "{{date_of_birth}}",
+    "emails": [
+      {
+        "type": "{{email_type}}",
+        "email": "{{email}}"
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  const firstNames = ["John", "Jane", "Kalyan", "Atul", "Ravi", "Priya", "Neha", "Arjun", "Sara", "Amit", "Nina"];
+  
+  const lastNames = ["Pawar", "Sharma", "Patel", "Kumar", "Singh", "Reddy", "Desai", "Nair", "Chopra", "Mehta", "Ambade"];
+  
+  function randomItem(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+  
+  const firstName = randomItem(firstNames);
+  const lastName = randomItem(lastNames);
+  
+  const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
+  
+  bru.setEnvVar("first_name", firstName);
+  bru.setEnvVar("lastname", lastName);
+  bru.setEnvVar("email", email);
+  
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = (`0${date.getMonth() + 1}`).slice(-2);
+    const day = (`0${date.getDate()}`).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+  
+  const today = new Date();
+  
+  const minAge = 25;
+  const maxAge = 55;
+  const age = Math.floor(Math.random() * (maxAge - minAge + 1)) + minAge;
+  
+  const dobYear = today.getFullYear() - age;
+  const dobMonth = Math.floor(Math.random() * 12);
+  const dobDay = Math.floor(Math.random() * 28) + 1;
+  const dob = new Date(dobYear, dobMonth, dobDay);
+  
+  const todaysDate = formatDate(today);
+  const dateOfBirth = formatDate(dob);
+  
+  bru.setEnvVar("date_of_birth", dateOfBirth);
+  bru.setEnvVar("todays_date", todaysDate);
+  bru.setEnvVar("age", age);
+  
+  const emailTypes = ["Hoome", "Work", "Office", "Business", "Personal"];
+  const randomEmailType = emailTypes[Math.floor(Math.random() * emailTypes.length)];
+  
+  const minSalary = 50000;
+  const maxSalary = 200000;
+  const step = 5000;
+  const randomSteps = Math.floor(Math.random() * ((maxSalary - minSalary) / step + 1));
+  const salary = minSalary + (randomSteps * step);
+  
+  bru.setEnvVar("email_type", randomEmailType);
+  bru.setEnvVar("salary", salary);
+  
+}
+
+script:post-response {
+  const response = res.getBody();
+  
+  const employee_id = response.id;
+  bru.setEnvVar("id", employee_id);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

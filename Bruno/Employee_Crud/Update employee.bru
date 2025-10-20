@@ -1,0 +1,53 @@
+meta {
+  name: Update employee
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{host}}{{port}}/api/employees/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{id}}
+}
+
+body:json {
+  {
+    "firstName": "{{first_name}}",
+    "lastName": "{{lastname}}",
+    "age": {{age}},
+    "salary": {{new_salary}},
+    "dateOfJoining": "{{todays_date}}",
+    "dob": "{{date_of_birth}}",
+    "emails": [
+      {
+        "type": "{{email_type}}",
+        "email": "{{email}}"
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 200
+  Number(res.body.salary): eq {{expected_salary}}
+}
+
+script:pre-request {
+  const newSalary = bru.getEnvVar("salary") + 10000;
+  bru.setEnvVar("new_salary", newSalary);
+}
+
+script:post-response {
+  const response = res.getBody();
+  const expectedSalary = bru.getEnvVar("salary") + 10000;
+  bru.setEnvVar("expected_salary", expectedSalary);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

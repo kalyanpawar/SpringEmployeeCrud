@@ -1,0 +1,25 @@
+meta {
+  name: Get by first name
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{host}}{{port}}/api/employees/findByFirstName?firstName={{first_name}}
+  body: none
+  auth: inherit
+}
+
+params:query {
+  firstName: {{first_name}}
+}
+
+assert {
+  res.status: eq 200
+  res.body.firstName: eq {{first_name}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
