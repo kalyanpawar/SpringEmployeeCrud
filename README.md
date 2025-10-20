@@ -25,13 +25,13 @@ When using Swagger UI, click the **Authorize** button and enter the credentials 
 Bruno is an open-source API client for testing REST APIs. This project includes a Bruno collection for testing all employee endpoints.
 
 ### Download Bruno
-- Visit [https://www.usebruno.com/download](https://www.usebruno.com/download) and download Bruno for your operating system.
+- Visit [https://www.usebruno.com/downloads](https://www.usebruno.com/downloads) and download Bruno for your operating system.
 - Install Bruno by following the instructions on the website.
 
 ### Open the Bruno Collection
 - After installing Bruno, open the Bruno app.
-- Click **Open Collection** and navigate to the `Bruno` folder in this project repository.
-- Select the `Employee_Crud` folder to load all API requests for employee CRUD operations.
+- Click **Open Collection** and navigate to the [`Bruno`](bruno) folder in this project repository.
+- Select the [`Employee_Crud`](bruno/Employee_Crud) folder to load all API requests for employee CRUD operations.
 - Use the provided requests to test endpoints. Make sure to use the authentication credentials:
   - **Username:** admin
   - **Password:** admin123
