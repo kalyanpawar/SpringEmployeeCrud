@@ -1,6 +1,8 @@
 # SpringEmployeeCrud
-
 This is a Spring Boot application for managing employees with full CRUD (Create, Read, Update, Delete) operations.
+
+## Related project
+This app is created for Rest Assured practice and can be found here: [RestAssuredPractice](https://github.com/kalyanpawar/RestAssuredPractice)
 
 ## Features
 - RESTful API for employee management
